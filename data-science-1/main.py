@@ -14,7 +14,7 @@
 
 # ## _Setup_ geral
 
-# In[1]:
+# In[ ]:
 
 
 import pandas as pd
@@ -38,7 +38,7 @@ from statsmodels.distributions.empirical_distribution import ECDF
 
 # ### _Setup_ da parte 1
 
-# In[2]:
+# In[ ]:
 
 
 np.random.seed(42)
@@ -49,35 +49,11 @@ dataframe = pd.DataFrame({"normal": sct.norm.rvs(20, 4, size=10000),
 
 # ## Inicie sua análise a partir da parte 1 a partir daqui
 
-# In[3]:
+# In[ ]:
 
 
 # Sua análise da parte 1 começa aqui.
 dataframe
-
-
-# In[ ]:
-
-
-# sns.distplot(dataframe['normal']);
-
-
-# In[ ]:
-
-
-# sns.distplot(dataframe['binomial']);
-
-
-# In[ ]:
-
-
-# sns.distplot(dataframe);
-
-
-# In[ ]:
-
-
-# sns.boxplot(dataframe);
 
 
 # ## Questão 1
@@ -118,6 +94,7 @@ def q2():
     ant, post = media - desvio_padrao, media + desvio_padrao
     ecdf = ECDF(dataframe.normal)
     q2_res = float(round(ecdf(post) - ecdf(ant),3))
+    
     return q2_res
 
 
@@ -136,9 +113,11 @@ def q2():
 
 
 def q3():
+    
     m_binom, v_binom = dataframe['binomial'].mean(), dataframe['binomial'].var()
     m_norm, v_norm = dataframe['normal'].mean(), dataframe['normal'].var()
     q3_res = tuple(np.round((m_binom - m_norm, v_binom - v_norm),3))
+    
     return q3_res
 
 
@@ -151,7 +130,7 @@ def q3():
 
 # ### _Setup_ da parte 2
 
-# In[4]:
+# In[ ]:
 
 
 stars = pd.read_csv("pulsar_stars.csv")
@@ -168,21 +147,12 @@ stars.loc[:, "target"] = stars.target.astype(bool)
 
 # ## Inicie sua análise da parte 2 a partir daqui
 
-# In[5]:
+# In[ ]:
 
 
 # Sua análise da parte 2 começa aqui.
 
 stars.head(10)
-
-
-# In[6]:
-
-
-mean_profile_filter = stars.query('target == 0')['mean_profile']
-mp_media = mean_profile_filter.mean()
-mp_desvio_padrao = mean_profile_filter.std()
-false_pulsar_mean_profile_standardized = (mean_profile_filter - mp_media) / mp_desvio_padrao
 
 
 # ## Questão 4
@@ -198,7 +168,16 @@ false_pulsar_mean_profile_standardized = (mean_profile_filter - mp_media) / mp_d
 # 
 # Quais as probabilidade associadas a esses quantis utilizando a CDF empírica da variável `false_pulsar_mean_profile_standardized`? Responda como uma tupla de três elementos arredondados para três casas decimais.
 
-# In[7]:
+# In[ ]:
+
+
+# Definindo false_pulsar_mean_profile_standardized como variável global
+
+mean_profile_filter = stars.query('target == 0')['mean_profile']
+false_pulsar_mean_profile_standardized = pd.Series(sct.zscore(mean_profile_filter))
+
+
+# In[ ]:
 
 
 def q4():
@@ -206,6 +185,7 @@ def q4():
     q080, q090, q095 = sct.norm.ppf([0.80, 0.90, 0.95], loc = 0, scale = 1)
     ecdf = ECDF(false_pulsar_mean_profile_standardized)
     q4_res = tuple(np.round(ecdf([q080, q090, q095]), 3))
+    
     return q4_res
 
 
@@ -218,10 +198,11 @@ def q4():
 # 
 # Qual a diferença entre os quantis Q1, Q2 e Q3 de `false_pulsar_mean_profile_standardized` e os mesmos quantis teóricos de uma distribuição normal de média 0 e variância 1? Responda como uma tupla de três elementos arredondados para três casas decimais.
 
-# In[11]:
+# In[ ]:
 
 
 def q5():
+    
     q_1, q_2, q_3 = false_pulsar_mean_profile_standardized.quantile([0.25, 0.5, 0.75])
     q1_norm, q2_norm, q3_norm = sct.norm.ppf([0.25, 0.5, 0.75], loc=0, scale=1)
     q5_res = tuple(np.round((q_1 - q1_norm, q_2 - q2_norm, q_3 - q3_norm), 3))

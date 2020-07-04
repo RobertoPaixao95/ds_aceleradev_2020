@@ -23,4 +23,4 @@ B:\Programas\Anaconda3\envs\cn_env\lib\site-packages\ipywidgets\widgets\widget_s
 
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
 -- generated xml file: C:\Users\Roberto\codenation\data-science-1\output.xml --
-==================== 5 passed, 4 warnings in 1.81 seconds =====================
+==================== 5 passed, 4 warnings in 1.82 seconds =====================
